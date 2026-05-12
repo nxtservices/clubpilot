@@ -1,0 +1,32 @@
+[
+  {
+    "content": "Create comprehensive Supabase schema with all tables and RLS policies",
+    "id": "1-schema",
+    "status": "completed"
+  },
+  {
+    "content": "Build app shell layout with sidebar navigation",
+    "id": "2-app-shell",
+    "status": "in_progress"
+  },
+  {
+    "content": "Implement main navigation menu in Dutch with all modules",
+    "id": "3-navigation",
+    "status": "pending"
+  },
+  {
+    "content": "Integrate sidebar with protected routes and auth context",
+    "id": "4-integration",
+    "status": "pending"
+  },
+  {
+    "content": "Create placeholder pages for all modules",
+    "id": "5-dashboard-pages",
+    "status": "pending"
+  },
+  {
+    "content": "Commit schema and app shell implementation",
+    "id": "6-commit",
+    "status": "pending"
+  }
+]
