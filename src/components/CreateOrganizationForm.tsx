@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { useTenant } from '@/lib/tenant-context';
 import { createTenant, addTenantMember } from '@/lib/tenant-service';
+import { supabase } from '@/lib/supabase';
 
 export function CreateOrganizationForm() {
   const router = useRouter();
@@ -66,12 +67,25 @@ export function CreateOrganizationForm() {
         description: formData.description || undefined,
       });
 
-      // TODO: Get admin role from database
-      // For now, create a default admin role
-      const adminRoleId = '00000000-0000-0000-0000-000000000001'; // Placeholder
+      // Create admin role for this tenant
+      const { data: role, error: roleError } = await supabase
+        .from('roles')
+        .insert([
+          {
+            tenant_id: tenant.id,
+            name: 'Beheerder',
+            description: 'Beheerder van de organisatie',
+            is_admin: true,
+          },
+        ])
+        .select()
+        .single();
 
-      // Add user as tenant member
-      await addTenantMember(tenant.id, user.id, adminRoleId);
+      if (roleError) throw roleError;
+      if (!role) throw new Error('Rol aanmaken mislukt');
+
+      // Add user as tenant member with admin role
+      await addTenantMember(tenant.id, user.id, role.id);
 
       // Refresh tenant context
       await refreshTenants();

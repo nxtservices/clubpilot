@@ -1,16 +1,28 @@
 'use client';
 
-import { ProtectedRoute } from '@/components/ProtectedRoute';
+import { AppLayout } from '@/components/AppLayout';
 import { CreateOrganizationForm } from '@/components/CreateOrganizationForm';
+import { useTenant } from '@/lib/tenant-context';
+import Link from 'next/link';
 
 export default function CreateOrganizationPage() {
+  const { activeTenant } = useTenant();
+
   return (
-    <ProtectedRoute>
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-teal-50 p-8">
-        <div className="max-w-2xl mx-auto">
-          <CreateOrganizationForm />
-        </div>
+    <AppLayout>
+      <div className="max-w-2xl">
+        {activeTenant && (
+          <div className="mb-6">
+            <Link
+              href="/cockpit"
+              className="text-brand-primary hover:underline text-sm"
+            >
+              ← Terug naar Cockpit
+            </Link>
+          </div>
+        )}
+        <CreateOrganizationForm />
       </div>
-    </ProtectedRoute>
+    </AppLayout>
   );
 }
