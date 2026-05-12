@@ -263,18 +263,26 @@ CREATE TABLE IF NOT EXISTS calendar_events (
   tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
   title TEXT NOT NULL,
   description TEXT,
-  event_type TEXT CHECK (event_type IN ('activity', 'meeting', 'shift', 'task_deadline', 'voting_round', 'reading_period', 'board_moment', 'committee_moment', 'team_assignment_deadline')),
-  start_date TIMESTAMP NOT NULL,
-  end_date TIMESTAMP,
+  event_type TEXT NOT NULL DEFAULT 'general' CHECK (event_type IN ('general', 'activity', 'meeting', 'volunteer_shift', 'task_deadline', 'voting_round', 'reading_period', 'committee_moment', 'board_moment', 'team_assignment_deadline', 'maintenance', 'training')),
+  status TEXT NOT NULL DEFAULT 'scheduled' CHECK (status IN ('draft', 'scheduled', 'needs_attention', 'confirmed', 'cancelled', 'completed')),
+  starts_at TIMESTAMPTZ NOT NULL,
+  ends_at TIMESTAMPTZ,
+  all_day BOOLEAN DEFAULT FALSE,
   location TEXT,
-  online_link TEXT,
-  organizer_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+  online_url TEXT,
+  owner_user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
   committee_id UUID REFERENCES committees(id) ON DELETE SET NULL,
   team_id UUID REFERENCES teams(id) ON DELETE SET NULL,
+  visibility TEXT NOT NULL DEFAULT 'tenant_all' CHECK (visibility IN ('private', 'board', 'committee', 'team', 'volunteers', 'members', 'tenant_all')),
   linked_entity_type TEXT,
   linked_entity_id UUID,
-  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+  needs_attention BOOLEAN DEFAULT FALSE,
+  attention_reason TEXT,
+  color_key TEXT,
+  recurrence_rule TEXT,
+  created_by UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- Tasks

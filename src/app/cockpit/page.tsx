@@ -1,18 +1,67 @@
 'use client';
 
+import React, { useState, useEffect } from 'react';
 import { AppLayout } from '@/components/AppLayout';
 import { useAuth } from '@/lib/auth-context';
+import { useTenant } from '@/lib/tenant-context';
+import { calendarService } from '@/lib/calendar-service';
+import { CalendarEvent } from '@/types/calendar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { AlertCircle, CheckCircle2, Users, Zap, Calendar, Vote, Gavel, TrendingUp } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Users, Zap, Calendar, Vote, Gavel, TrendingUp, Clock } from 'lucide-react';
+import Link from 'next/link';
 
 export default function CockpitPage() {
   const { user } = useAuth();
+  const { activeTenant } = useTenant();
+  const [upcomingEvents, setUpcomingEvents] = useState<CalendarEvent[]>([]);
+  const [eventsNeedingAttention, setEventsNeedingAttention] = useState<CalendarEvent[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (activeTenant?.id) {
+      loadAgendaData();
+    }
+  }, [activeTenant?.id]);
+
+  const loadAgendaData = async () => {
+    try {
+      setLoading(true);
+      if (!activeTenant?.id) return;
+
+      const [upcoming, needsAttention] = await Promise.all([
+        calendarService.getUpcomingEvents(activeTenant.id, 5),
+        calendarService.getEventsNeedingAttention(activeTenant.id),
+      ]);
+
+      setUpcomingEvents(upcoming);
+      setEventsNeedingAttention(needsAttention);
+    } catch (err) {
+      console.error('Error loading agenda data:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const getGreeting = () => {
     const hour = new Date().getHours();
     if (hour < 12) return 'Goedemorgen';
     if (hour < 18) return 'Goedemiddag';
     return 'Goedenavond';
+  };
+
+  const formatEventDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    if (date.toDateString() === today.toDateString()) {
+      return 'Vandaag';
+    } else if (date.toDateString() === tomorrow.toDateString()) {
+      return 'Morgen';
+    } else {
+      return date.toLocaleDateString('nl-NL', { weekday: 'short', month: 'short', day: 'numeric' });
+    }
   };
 
   return (
@@ -109,17 +158,66 @@ export default function CockpitPage() {
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg flex items-center gap-2">
                   <Calendar className="w-5 h-5 text-blue-500" />
-                  Agenda
+                  Aankomende Agenda
                 </CardTitle>
-                <span className="bg-blue-50 text-blue-600 text-xs font-bold px-2 py-1 rounded">0</span>
+                <Link href="/agenda" className="text-xs text-brand-primary hover:underline">
+                  Bekijk alles
+                </Link>
               </div>
             </CardHeader>
-            <CardContent>
-              <p className="text-sm text-gray-600">
-                Geen aankomende events. Volg de agenda voor belangrijke datums.
-              </p>
+            <CardContent className="space-y-2">
+              {loading ? (
+                <p className="text-sm text-gray-600">Laden...</p>
+              ) : upcomingEvents.length === 0 ? (
+                <p className="text-sm text-gray-600">Geen aankomende agenda-items.</p>
+              ) : (
+                upcomingEvents.map((event) => (
+                  <div
+                    key={event.id}
+                    className="flex items-start gap-2 p-2 bg-gray-50 rounded text-sm"
+                  >
+                    <Clock className="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5" />
+                    <div className="min-w-0 flex-1">
+                      <p className="font-medium text-brand-navy truncate">{event.title}</p>
+                      <p className="text-xs text-gray-600">{formatEventDate(event.starts_at)}</p>
+                    </div>
+                  </div>
+                ))
+              )}
             </CardContent>
           </Card>
+
+          {/* Events Needing Attention */}
+          {eventsNeedingAttention.length > 0 && (
+            <Card className="hover:shadow-lg transition-shadow border-red-200 bg-red-50">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <AlertCircle className="w-5 h-5 text-red-600" />
+                    Agenda - Actie nodig
+                  </CardTitle>
+                  <span className="bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">
+                    {eventsNeedingAttention.length}
+                  </span>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                {eventsNeedingAttention.slice(0, 3).map((event) => (
+                  <div key={event.id} className="text-xs p-2 bg-white rounded border border-red-200">
+                    <p className="font-medium text-red-900">{event.title}</p>
+                    {event.attention_reason && (
+                      <p className="text-red-700 mt-1">{event.attention_reason}</p>
+                    )}
+                  </div>
+                ))}
+                {eventsNeedingAttention.length > 3 && (
+                  <Link href="/agenda?view=needs-attention" className="text-xs text-red-600 hover:underline block">
+                    +{eventsNeedingAttention.length - 3} meer
+                  </Link>
+                )}
+              </CardContent>
+            </Card>
+          )}
 
           {/* Voting Rounds */}
           <Card className="hover:shadow-lg transition-shadow">
