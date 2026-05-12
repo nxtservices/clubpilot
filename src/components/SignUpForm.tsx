@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
@@ -72,13 +71,8 @@ export function SignUpForm() {
         {/* Header */}
         <div className="mb-8 text-center">
           <div className="flex justify-center mb-4">
-            <div className="relative w-16 h-16">
-              <Image
-                src="/images/clubpilot-logo.svg"
-                alt="ClubPilot"
-                fill
-                className="object-contain"
-              />
+            <div className="w-16 h-16 bg-brand-primary rounded-lg flex items-center justify-center">
+              <div className="text-white font-bold text-3xl">CP</div>
             </div>
           </div>
           <h1 className="text-4xl font-bold bg-gradient-to-r from-brand-primary to-brand-navy bg-clip-text text-transparent mb-1">

@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
@@ -130,13 +129,9 @@ export function Sidebar() {
           {/* Logo/Header */}
           <div className="p-6 border-b border-brand-border bg-gradient-to-br from-white to-brand-light">
             <div className="flex items-center gap-2 mb-1">
-              <Image
-                src="/images/clubpilot-logo.svg"
-                alt="ClubPilot"
-                width={32}
-                height={32}
-                className="rounded-lg"
-              />
+              <div className="w-8 h-8 bg-brand-primary rounded-lg flex items-center justify-center">
+                <div className="text-white font-bold text-lg">CP</div>
+              </div>
               <h1 className="text-2xl font-bold bg-gradient-to-r from-brand-primary to-brand-navy bg-clip-text text-transparent">
                 ClubPilot
               </h1>
