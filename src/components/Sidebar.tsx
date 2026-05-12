@@ -20,6 +20,7 @@ import {
   LogOut,
 } from 'lucide-react';
 import { useAuth } from '@/lib/auth-context';
+import { TenantSelector } from '@/components/TenantSelector';
 
 interface MenuItem {
   label: string;
@@ -128,6 +129,9 @@ export function Sidebar() {
             <h1 className="text-2xl font-bold text-brand-dark">ClubPilot</h1>
             <p className="text-xs text-gray-500 mt-1">De slimme cockpit</p>
           </div>
+
+          {/* Tenant Selector */}
+          <TenantSelector />
 
           {/* Navigation Menu */}
           <nav className="flex-1 overflow-y-auto p-4 space-y-1">

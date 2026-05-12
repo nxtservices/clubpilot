@@ -1,107 +1,146 @@
-# ClubPilot MVP Development
+# ClubPilot MVP Development - PHASES 1-4 COMPLETE
 
-## Project Overview
-ClubPilot is a smart multi-tenant SaaS platform for associations, sports clubs, committees, volunteers and boards. It's a central workspace connecting people, roles, availability, teams, committees, tasks, documents, agenda items, meetings, decisions and voting rounds.
+## Completed Phases
 
-**Tagline:** De slimme cockpit voor je vereniging (The smart cockpit for your association)
+### Phase 1 ✅ Project Setup
+- Next.js 14 with TypeScript
+- Tailwind CSS with brand colors
+- Supabase client configured
+- Git repository initialized
+- All dependencies installed
 
-**Philosophy:** Build the MVP as a Smart Foundation. Do not implement heavy AI yet. First build strong data models, workflows, rule-based smart signals and smart suggestions.
+### Phase 2 ✅ Supabase Auth Setup
+- **Auth pages (Dutch UI):**
+  - Sign Up: `/signup` - Register with email, password, full name
+  - Sign In: `/signin` - Login with email & password
+  - Form validation with error messages in Dutch
+  
+- **Auth infrastructure:**
+  - Auth context with state management
+  - Session persistence
+  - Real-time auth state updates
+  - Protected routes with auto-redirect
+  - Loading spinner while checking auth
+
+### Phase 3 ✅ Complete Database Schema
+**Location:** `supabase/schema.sql` (ready to execute in Supabase)
+
+**Tables created:**
+- **Core:** tenants, profiles, tenant_memberships, roles, permissions, role_permissions, seasons, audit_logs
+- **Organization:** committees, committee_members, teams, team_members
+- **Volunteers:** volunteer_profiles, volunteer_intake_answers, volunteer_task_templates, volunteer_shifts, volunteer_shift_assignments, volunteer_points_ledger
+- **Planning:** calendar_events, tasks, task_comments
+- **Documents:** documents
+- **Meetings:** meetings, meeting_agenda_items
+- **Decisions:** decisions
+- **Voting:** voting_rounds, voting_options, votes
+- **Smart:** notifications, smart_signals, smart_suggestions
+
+**All tables have:**
+- tenant_id for multi-tenant architecture
+- Proper timestamps and indexes
+- Foreign key constraints
+- Status enums where applicable
+
+### Phase 4 ✅ App Shell & Sidebar Navigation
+**App Layout:**
+- Responsive sidebar (collapsible on mobile)
+- Main content area with padding
+- Protected route wrapper
+
+**Sidebar Navigation (Dutch):**
+1. **Cockpit** - Dashboard with smart signals
+2. **Agenda** - Calendar and events
+3. **Vrijwilligers** - Volunteers management
+4. **Taken** - Tasks and to-do lists
+5. **Commissies** - Committees
+6. **Teams** - Team management
+7. **Documenten** - Document library
+8. **Vergaderingen** - Meetings
+9. **Besluiten** - Decisions
+10. **Stemmingen** - Voting rounds
+11. **Notificaties** - Notifications (footer)
+12. **Instellingen** - Settings (footer)
+13. **Afmelden** - Sign out button (footer)
+
+**Features:**
+- Active route highlighting
+- Mobile hamburger menu
+- Mobile overlay
+- Brand colors throughout
+- Icons for all menu items
+- Responsive design (mobile-first)
+
+## Current Pages
+
+All placeholder pages created and wired to sidebar:
+- `/cockpit` - Dashboard (Smart Signals, My Tasks, My Shifts, Events, Voting, Decisions)
+- `/agenda` - Agenda management
+- `/vrijwilligers` - Volunteer module
+- `/taken` - Tasks module
+- `/commissies` - Committees module
+- `/teams` - Teams module
+- `/documenten` - Documents module
+- `/vergaderingen` - Meetings module
+- `/besluiten` - Decisions module
+- `/stemmingen` - Voting module
+- `/notificaties` - Notifications
+- `/instellingen` - Settings
+- `/signin` - Login page
+- `/signup` - Sign-up page
+- `/onboarding` - Onboarding wizard placeholder
+
+## Environment Setup
+
+**Required files:**
+- `.env.local` - Has placeholders for Supabase credentials
+- `supabase/schema.sql` - Complete database schema
+- `supabase/rls_policies.sql` - RLS policies (ready to apply)
+
+**Next: Configure Supabase**
+
+1. Go to https://supabase.com
+2. Create a new project
+3. Get credentials:
+   - `NEXT_PUBLIC_SUPABASE_URL` from project settings
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY` from API keys
+4. Update `.env.local` with your credentials
+5. In Supabase SQL editor, run:
+   ```
+   -- Run supabase/schema.sql first
+   -- Then run supabase/rls_policies.sql
+   ```
 
 ## Tech Stack
 - Next.js 14+ (App Router)
-- TypeScript
-- Tailwind CSS
-- Framer Motion (subtle animations)
-- Supabase Auth (authentication)
-- Supabase Postgres (database with RLS)
-- Supabase RLS (mandatory row-level security)
+- React 18 with TypeScript
+- Tailwind CSS (brand colors configured)
+- Supabase Auth & Postgres
+- Supabase RLS for multi-tenant security
+- Framer Motion (installed, ready for animations)
+- Lucide React (icons)
 
-## Branding & Colors
-- Primary: #2563EB (brand-primary)
-- Secondary: #14B8A6 (brand-secondary)
-- Highlight: #FACC15 (brand-highlight)
-- Dark Navy: #0F172A (brand-dark)
-- Light Background: #F8FAFC (brand-light)
-- Language: Dutch (nl)
-- Style: Modern, trustworthy, friendly, professional SaaS
+## Architecture Highlights
+- **Multi-tenant:** Every table has tenant_id
+- **RLS Policies:** Helper function `is_tenant_member()` for secure data access
+- **Auth Context:** Global state management
+- **Protected Routes:** All dashboard pages require authentication
+- **Responsive:** Mobile-first design with collapsible sidebar
 
-## Core Architecture Requirements
-- **Multi-tenant from day one**: Every tenant-owned table must have tenant_id
-- **Users belong to multiple tenants**: Not one user = one tenant
-- **Tenant-scoped roles & permissions**: All access control is per-tenant
-- **Supabase RLS mandatory**: All tenant data is private by default
-- **Audit logs append-only**: Full history tracking
-- **Future-ready**: Prepared for AI, WhatsApp, Google Drive, OneDrive, calendar integrations
+## Next Steps (Phases 5+)
 
-## Project Structure
-```
-clubpilot_saas/
-├── src/
-│   ├── app/              # Next.js App Router pages and layout
-│   ├── components/       # React components
-│   ├── lib/              # Utilities, supabase client, helpers
-│   ├── types/            # TypeScript types and interfaces
-│   └── styles/           # Global styles
-├── public/               # Static assets
-├── .env.local.example    # Environment template
-├── package.json          # Dependencies
-├── tsconfig.json         # TypeScript config
-├── next.config.js        # Next.js config
-├── tailwind.config.ts    # Tailwind config
-├── postcss.config.js     # PostCSS config
-└── .gitignore            # Git ignore rules
-```
+1. **Set up Supabase**: Execute schema and RLS policies
+2. **Build Tenant/Organization Setup**: Onboarding flow
+3. **Build Volunteer Module**: Intake form, shifts, assignments
+4. **Build Smart Engine**: Smart signals and suggestions (rule-based)
+5. **Build remaining modules**: Meetings, decisions, voting
 
-## Core Database Tables (per spec)
-See supabase/schema.sql when created. Key structure:
-- **Core**: tenants, profiles, tenant_memberships, roles, permissions, role_permissions, seasons
-- **Organization**: committees, committee_members, teams, team_members, parent_child_links
-- **Volunteers**: volunteer_profiles, volunteer_intake_answers, volunteer_shifts, volunteer_points_ledger
-- **Planning**: calendar_events, tasks, task_comments
-- **Documents**: documents, document_links
-- **Meetings**: meetings, meeting_agenda_items
-- **Decisions**: decisions
-- **Voting**: voting_rounds, voting_options, votes
-- **Smart**: smart_signals, smart_suggestions, notifications
+## Project Status
+- ✅ Foundation complete
+- ✅ Auth ready to use
+- ✅ Database schema ready to deploy
+- ✅ App shell with navigation ready
+- ⏳ Awaiting Supabase credentials to test
 
-## MVP Build Order (Phases)
-1. ✅ Project setup, dependencies, basic structure
-2. Supabase Auth setup & RLS policies
-3. Database schema creation
-4. App shell & sidebar navigation
-5. Tenant & membership foundation
-6. Committees & Teams
-7. Volunteer intake form
-8. Volunteer task templates & shifts
-9. Volunteer planning (signup, assignment, team assignment)
-10. Volunteer points ledger system
-11. Agenda/Calendar module
-12. Tasks module
-13. Document links
-14. Meetings module
-15. Decisions module
-16. Voting rounds
-17. In-app notifications
-18. Smart signals & suggestions
-19. Smart volunteer placement
-20. Demo data seeding
-
-## Important Principles
-- **No heavy AI in MVP**: Use rule-based logic, not ML
-- **Strong data models first**: Architecture for AI later
-- **Dutch UI language**: All labels in Dutch
-- **Responsive design**: Mobile-friendly
-- **Supabase RLS**: Every query respects tenant boundaries
-- **Audit trails**: Every action is logged
-
-## Environment Variables Needed
-```
-NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
-```
-
-## Next Steps
-1. Set up Supabase project and get credentials
-2. Create .env.local from .env.local.example
-3. Begin Phase 2: Auth & RLS implementation
-4. Create database schema
+**Dev server running:** `npm run dev` on localhost:3000
+**All code committed to git**

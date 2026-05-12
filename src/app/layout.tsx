@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { AuthProvider } from '@/lib/auth-context';
+import { TenantProvider } from '@/lib/tenant-context';
 
 export const metadata: Metadata = {
   title: 'ClubPilot - De slimme cockpit voor je vereniging',
@@ -15,7 +16,9 @@ export default function RootLayout({
   return (
     <html lang="nl">
       <body>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <TenantProvider>{children}</TenantProvider>
+        </AuthProvider>
       </body>
     </html>
   );

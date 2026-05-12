@@ -1,32 +1,37 @@
 [
   {
-    "content": "Create comprehensive Supabase schema with all tables and RLS policies",
-    "id": "1-schema",
-    "status": "completed"
-  },
-  {
-    "content": "Build app shell layout with sidebar navigation",
-    "id": "2-app-shell",
+    "content": "Create tenant hooks and database operations (create, list, update tenant)",
+    "id": "1-tenant-hooks",
     "status": "in_progress"
   },
   {
-    "content": "Implement main navigation menu in Dutch with all modules",
-    "id": "3-navigation",
+    "content": "Build tenant context for managing active tenant selection",
+    "id": "2-tenant-context",
     "status": "pending"
   },
   {
-    "content": "Integrate sidebar with protected routes and auth context",
-    "id": "4-integration",
+    "content": "Create organization creation form and page",
+    "id": "3-org-form",
     "status": "pending"
   },
   {
-    "content": "Create placeholder pages for all modules",
-    "id": "5-dashboard-pages",
+    "content": "Build organization list and switching UI",
+    "id": "4-org-list",
     "status": "pending"
   },
   {
-    "content": "Commit schema and app shell implementation",
-    "id": "6-commit",
+    "content": "Update onboarding flow for tenant setup",
+    "id": "5-onboarding",
+    "status": "pending"
+  },
+  {
+    "content": "Create initial role permissions and setup",
+    "id": "6-roles-setup",
+    "status": "pending"
+  },
+  {
+    "content": "Test and commit tenant/organization setup",
+    "id": "7-commit",
     "status": "pending"
   }
 ]
