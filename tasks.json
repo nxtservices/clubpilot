@@ -2,36 +2,36 @@
   {
     "content": "Create tenant hooks and database operations (create, list, update tenant)",
     "id": "1-tenant-hooks",
-    "status": "in_progress"
+    "status": "completed"
   },
   {
     "content": "Build tenant context for managing active tenant selection",
     "id": "2-tenant-context",
-    "status": "pending"
+    "status": "completed"
   },
   {
     "content": "Create organization creation form and page",
     "id": "3-org-form",
-    "status": "pending"
+    "status": "completed"
   },
   {
     "content": "Build organization list and switching UI",
     "id": "4-org-list",
-    "status": "pending"
+    "status": "completed"
   },
   {
     "content": "Update onboarding flow for tenant setup",
     "id": "5-onboarding",
-    "status": "pending"
+    "status": "completed"
   },
   {
     "content": "Create initial role permissions and setup",
     "id": "6-roles-setup",
-    "status": "pending"
+    "status": "completed"
   },
   {
     "content": "Test and commit tenant/organization setup",
     "id": "7-commit",
-    "status": "pending"
+    "status": "completed"
   }
 ]
