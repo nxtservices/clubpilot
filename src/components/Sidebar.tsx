@@ -9,9 +9,9 @@ import {
   LayoutDashboard,
   Calendar,
   Users,
-  CheckSquare2,
+  CheckSquare,
   Users2,
-  Users3,
+  Briefcase,
   FileText,
   BookOpen,
   Gavel,
@@ -55,7 +55,7 @@ export function Sidebar() {
     {
       label: 'Taken',
       href: '/taken',
-      icon: <CheckSquare2 className="w-5 h-5" />,
+      icon: <CheckSquare className="w-5 h-5" />,
     },
     {
       label: 'Commissies',
@@ -65,7 +65,7 @@ export function Sidebar() {
     {
       label: 'Teams',
       href: '/teams',
-      icon: <Users3 className="w-5 h-5" />,
+      icon: <Briefcase className="w-5 h-5" />,
     },
     {
       label: 'Documenten',
