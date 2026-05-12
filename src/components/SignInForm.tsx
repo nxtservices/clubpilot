@@ -4,6 +4,10 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Alert } from '@/components/ui/alert';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { SignInData } from '@/types/auth';
 
 export function SignInForm() {
@@ -52,79 +56,81 @@ export function SignInForm() {
   const displayError = validationError || error;
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-teal-50 px-4 py-12">
-      <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
-        <div className="mb-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-teal-50 px-4 py-12">
+      <div className="w-full max-w-md">
+        {/* Header */}
+        <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold text-brand-dark mb-2">ClubPilot</h1>
-          <p className="text-gray-600 text-sm">De slimme cockpit voor je vereniging</p>
+          <p className="text-gray-600">De slimme cockpit voor je vereniging</p>
         </div>
 
-        <h2 className="text-2xl font-semibold text-brand-dark mb-6">Aanmelden</h2>
+        {/* Card */}
+        <Card>
+          <CardHeader className="space-y-1">
+            <CardTitle className="text-2xl">Aanmelden</CardTitle>
+            <CardDescription>Meld je aan met je e-mailadres en wachtwoord</CardDescription>
+          </CardHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {displayError && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
-              {displayError}
-            </div>
-          )}
+          <CardContent className="space-y-6">
+            {displayError && (
+              <Alert variant="error">{displayError}</Alert>
+            )}
 
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-              E-mailadres
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              disabled={loading}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition"
-              placeholder="jan@voorbeeld.nl"
-            />
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <Input
+                type="email"
+                id="email"
+                name="email"
+                label="E-mailadres"
+                placeholder="jij@voorbeeld.nl"
+                value={formData.email}
+                onChange={handleChange}
+                disabled={loading}
+                required
+              />
+
+              <Input
+                type="password"
+                id="password"
+                name="password"
+                label="Wachtwoord"
+                placeholder="••••••••"
+                value={formData.password}
+                onChange={handleChange}
+                disabled={loading}
+                required
+              />
+
+              <Button
+                type="submit"
+                disabled={loading}
+                isLoading={loading}
+                size="lg"
+                className="w-full"
+              >
+                {loading ? 'Bezig met aanmelden...' : 'Aanmelden'}
+              </Button>
+            </form>
+          </CardContent>
+
+          {/* Footer */}
+          <div className="px-6 py-4 border-t border-gray-200 bg-gray-50 rounded-b-xl">
+            <p className="text-center text-sm text-gray-600">
+              Nog geen account?{' '}
+              <Link href="/signup" className="font-semibold text-brand-primary hover:underline">
+                Account aanmaken
+              </Link>
+            </p>
           </div>
+        </Card>
 
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-              Wachtwoord
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              disabled={loading}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition"
-              placeholder="Wachtwoord"
-            />
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-brand-primary hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {loading ? 'Bezig met aanmelden...' : 'Aanmelden'}
+        {/* Help text */}
+        <p className="text-center text-xs text-gray-500 mt-6">
+          Problemen met inloggen?{' '}
+          <button className="text-brand-primary hover:underline font-medium">
+            Neem contact op
           </button>
-        </form>
-
-        <p className="text-center text-gray-600 text-sm mt-6">
-          Nog geen account?{' '}
-          <Link href="/signup" className="text-brand-primary hover:underline font-semibold">
-            Account aanmaken
-          </Link>
         </p>
-
-        <div className="mt-6 pt-6 border-t border-gray-200">
-          <p className="text-center text-gray-600 text-sm">
-            Demo account{' '}
-            <span className="block text-xs mt-2 text-gray-500">
-              Email: demo@club.nl<br />
-              Wachtwoord: password123
-            </span>
-          </p>
-        </div>
       </div>
     </div>
   );

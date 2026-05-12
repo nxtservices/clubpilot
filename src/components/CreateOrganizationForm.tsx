@@ -6,6 +6,11 @@ import { useAuth } from '@/lib/auth-context';
 import { useTenant } from '@/lib/tenant-context';
 import { createTenant, addTenantMember } from '@/lib/tenant-service';
 import { supabase } from '@/lib/supabase';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { TextArea } from '@/components/ui/textarea';
+import { Alert } from '@/components/ui/alert';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 export function CreateOrganizationForm() {
   const router = useRouter();
@@ -102,81 +107,68 @@ export function CreateOrganizationForm() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-8">
-      <h1 className="text-3xl font-bold text-brand-dark mb-2">Organisatie aanmaken</h1>
-      <p className="text-gray-600 mb-8">Maak je eerste organisatie/vereniging aan</p>
+    <Card className="w-full">
+      <CardHeader>
+        <CardTitle>Organisatie aanmaken</CardTitle>
+        <CardDescription>
+          Maak je eerste organisatie of vereniging aan
+        </CardDescription>
+      </CardHeader>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <CardContent className="space-y-6">
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
-            {error}
-          </div>
+          <Alert variant="error">{error}</Alert>
         )}
 
-        <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-            Organisatienaam *
-          </label>
-          <input
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <Input
             type="text"
             id="name"
             name="name"
+            label="Organisatienaam *"
+            placeholder="Bijvoorbeeld: Voetbalclub De Favaart"
             value={formData.name}
             onChange={handleChange}
             disabled={loading}
-            placeholder="Bijvoorbeeld: Voetbalclub Ajax"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition"
+            hint="Dit is de naam van je organisatie of vereniging"
             required
           />
-          <p className="text-xs text-gray-500 mt-1">Dit is de naam van je organisatie of vereniging</p>
-        </div>
 
-        <div>
-          <label htmlFor="slug" className="block text-sm font-medium text-gray-700 mb-1">
-            URL-slug *
-          </label>
-          <input
+          <Input
             type="text"
             id="slug"
             name="slug"
+            label="URL-slug *"
+            placeholder="de-favaart"
             value={formData.slug}
             onChange={handleChange}
             disabled={loading}
-            placeholder="voetbalclub-ajax"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition text-sm"
+            hint="Dit wordt gebruikt in URLs. Alleen letters, nummers en streepjes."
             required
           />
-          <p className="text-xs text-gray-500 mt-1">
-            Dit wordt gebruikt in URLs. Alleen letters, nummers en streepjes.
-          </p>
-        </div>
 
-        <div>
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
-            Beschrijving
-          </label>
-          <textarea
+          <TextArea
             id="description"
             name="description"
+            label="Beschrijving"
+            placeholder="Optionele beschrijving van je organisatie..."
             value={formData.description}
             onChange={handleChange}
             disabled={loading}
-            placeholder="Optionele beschrijving van je organisatie..."
-            rows={4}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition"
+            hint="Optioneel. Dit helpt je organisatie te identificeren."
           />
-        </div>
 
-        <div className="flex gap-4">
-          <button
+          <Button
             type="submit"
             disabled={loading}
-            className="flex-1 bg-brand-primary hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
+            isLoading={loading}
+            size="lg"
+            className="w-full"
           >
-            {loading ? 'Bezig met aanmaken...' : 'Organisatie aanmaken'}
-          </button>
-        </div>
-      </form>
-    </div>
+            Organisatie aanmaken
+          </Button>
+        </form>
+      </CardContent>
+    </Card>
   );
 }
