@@ -1,21 +1,16 @@
 'use client';
 
 import { useAuth } from '@/lib/auth-context';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
-export default function Home() {
+export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (!loading) {
-      if (user) {
-        router.push('/cockpit');
-      } else {
-        router.push('/signin');
-      }
+    if (!loading && !user) {
+      router.push('/signin');
     }
   }, [user, loading, router]);
 
@@ -27,5 +22,9 @@ export default function Home() {
     );
   }
 
-  return null;
+  if (!user) {
+    return null;
+  }
+
+  return <>{children}</>;
 }
